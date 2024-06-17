@@ -1,0 +1,8 @@
+spring:
+  main:
+    banner-mode: OFF
+
+  rabbitmq:
+    listener:
+      simple:
+        prefetch: 1

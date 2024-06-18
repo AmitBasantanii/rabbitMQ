@@ -1,0 +1,10 @@
+spring:
+  main:
+    banner-mode: OFF
+
+  rabbitmq:
+    publish-confirm-type: correlated
+    publisher-returns: true
+    template:
+      mandatory: true
+

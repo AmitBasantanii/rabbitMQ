@@ -4,6 +4,7 @@ import com.rabbitmq.two.entity.*;
 import com.rabbitmq.two.producer.DummyProducer;
 import com.rabbitmq.two.producer.InvoiceProducer;
 import com.rabbitmq.two.producer.MultiplePrefetchProducer;
+import com.rabbitmq.two.producer.ReliableProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -29,8 +30,14 @@ public class Application implements CommandLineRunner {
 //	@Autowired
 //	private InvoiceProducer invoiceProducer;
 
+//	@Autowired
+//	private SingleActiveProducer singleActiveProducer;
+
+//	@Autowired
+//	private ReliableProducer reliableProducer;
+
 	@Autowired
-	private SingleActiveProducer singleActiveProducer;
+	private InvoiceProducer invoiceProducer;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -71,6 +78,27 @@ public class Application implements CommandLineRunner {
 //		var invoiceCancelledMessage = new InvoiceCancelledMessage(LocalDate.now(), randomInvoiceNumber, "Invoice Canceled");
 //		invoiceProducer.sendInvoiceCancelled(invoiceCancelledMessage);
 
-		singleActiveProducer.sendDummy();
+		// another project
+//		singleActiveProducer.sendDummy();
+
+//		// another project
+//		var dummyMessage = new DummyMessage("Dummy content", 1);
+//
+//		System.out.println("--------------------------------------------");
+//		System.out.println("Calling sendDummyToInvalidExchange()");
+//		reliableProducer.sendDummyToInvalidExchange(dummyMessage);
+//
+//		System.out.println("-----------------------------------------------");
+//		System.out.println("Calling sendDummyWithInvalidRoutingKey()");
+//		reliableProducer.sendDummyWithInvalidRoutingKey(dummyMessage);
+
+		// another one - Request / Reply - Payment cancellation
+		for(int i=0; i<10; i++) {
+			var invoiceNumber = "INV-" + i;
+			var invoiceCancelledMessage = new InvoiceCancelledMessage(LocalDate.now(), invoiceNumber,
+					"Invoice cancelled " + i);
+
+			invoiceProducer.sendInvoiceCancelled(invoiceCancelledMessage);
+		}
 	}
 }
